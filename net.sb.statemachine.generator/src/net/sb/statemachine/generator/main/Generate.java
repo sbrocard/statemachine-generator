@@ -21,6 +21,8 @@ import net.sb.statemachine.dsl.stm.StmPackage;
 import org.eclipse.acceleo.engine.event.IAcceleoTextGenerationListener;
 import org.eclipse.acceleo.engine.generation.strategy.IAcceleoGenerationStrategy;
 import org.eclipse.acceleo.engine.service.AbstractAcceleoGenerator;
+import org.eclipse.acceleo.engine.utils.AcceleoEngineUtils;
+import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.Monitor;
 import org.eclipse.emf.common.util.URI;
@@ -326,6 +328,10 @@ public class Generate extends AbstractAcceleoGenerator {
          * 
          * To learn more about Properties Files, have a look at the Acceleo documentation (Help -> Help Contents).
          */
+        if (EMFPlugin.IS_ECLIPSE_RUNNING && model != null && model.eResource() != null) { 
+            propertiesFiles.addAll(AcceleoEngineUtils.getPropertiesFilesNearModel(model.eResource()));
+        }
+        
         return propertiesFiles;
     }
     
@@ -363,7 +369,8 @@ public class Generate extends AbstractAcceleoGenerator {
     @Override
     public void registerPackages(ResourceSet resourceSet) {
         super.registerPackages(resourceSet);
-        if (!isInWorkspace(StmPackage.class)) {             // The normal package registration if your metamodel is in a plugin.
+        if (!isInWorkspace(StmPackage.class)) {
+        	// The normal package registration if your metamodel is in a plugin.
             resourceSet.getPackageRegistry().put(StmPackage.eNS_URI, StmPackage.eINSTANCE);
         }
         /*
