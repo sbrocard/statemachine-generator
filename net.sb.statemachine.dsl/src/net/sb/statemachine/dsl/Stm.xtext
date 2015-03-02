@@ -1,0 +1,64 @@
+grammar net.sb.statemachine.dsl.Stm with org.eclipse.xtext.common.Terminals
+
+generate stm "http://www.sb.net/statemachine/dsl/Stm"
+
+Statemachine:
+	{Statemachine}
+	'events' (events+=Event)* 'end'
+	'commands' (commands+=Command)* 'end'
+	'guard' (guards+=Guard)* 'end'
+	(states+=State)*
+//	('action' (actions+=Action)* 'end')?
+//	('actionMap' (actionMaps+=ActionMap)* 'end')?
+	;
+
+Event:
+	name=ID;
+
+Command:
+	name=ID;
+
+
+//Action:
+//	name=ID
+//	('iconResourceName' iconResourceName=STRING)?
+//	('shortDescription' shortDescription=STRING)?
+//	;
+//
+//ActionMap:
+//	action=[Action] keyStroke=STRING;
+//
+//PopupMenu:
+//	action=[Action] (toolTip=STRING)?;
+//
+State:
+	'state' name=ID
+	('entryActions' '{' (entryActions+=[Command])+ '}')?
+	('do' doAction=[Command] stopAction=[Command])?
+	(states+=State)*
+	(selfEvents+=SelfEvent)*
+	(transitions+=Transition)*
+	('exitActions' '{' (exitActions+=[Command])+ '}')?
+	
+//	('popupMenu' '{' (popupMenu+=PopupMenu)+ '}')?
+//	('tip' tip=STRING)?
+//	('actions' '{' (actions+=ActionEnabler)+ '}')?
+	'end';
+
+//ActionEnabler:
+//	action=[Action] ( '[' guard=GuardCall ']') ?;
+
+Transition:
+	event=[Event] ('[' guard=GuardCall ']')? '=>' state=[State] ('/' action=[Command])?;
+
+SelfEvent:
+	event=[Event] ('[' guard=GuardCall ']')? '/' action=[Command];
+
+GuardCall:
+	guard=[Guard] ( parameters+=ID )?;
+	
+Guard:
+	name=ID ( '[' parameters+=Parameter ']')?;
+	
+Parameter:
+	name=ID ':' type=ID;

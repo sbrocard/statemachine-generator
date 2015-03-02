@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/net.sb.statemachine.dsl/src-gen" editDirectory="/net.sb.statemachine.dsl.edit/src"
+    editorDirectory="/net.sb.statemachine.dsl.editor/src" modelPluginID="net.sb.statemachine.dsl"
+    forceOverwrite="true" modelName="Stm" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="5.0" copyrightFields="false" editPluginID="net.sb.statemachine.dsl.edit"
+    editorPluginID="net.sb.statemachine.dsl.editor" runtimeVersion="2.9">
+  <genPackages prefix="Stm" basePackage="net.sb.statemachine.dsl" disposableProviderFactory="true"
+      ecorePackage="Stm.ecore#/">
+    <genClasses ecoreClass="Stm.ecore#//Statemachine">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//Statemachine/events"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//Statemachine/commands"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//Statemachine/guards"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//Statemachine/states"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//Event">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Stm.ecore#//Event/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//Command">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Stm.ecore#//Command/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//State">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Stm.ecore#//State/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//State/entryActions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//State/doAction"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//State/stopAction"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//State/states"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//State/selfEvents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//State/transitions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//State/exitActions"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//Transition">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//Transition/event"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//Transition/guard"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//Transition/state"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//Transition/action"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//SelfEvent">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//SelfEvent/event"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//SelfEvent/guard"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//SelfEvent/action"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//GuardCall">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Stm.ecore#//GuardCall/guard"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Stm.ecore#//GuardCall/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//Guard">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Stm.ecore#//Guard/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Stm.ecore#//Guard/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Stm.ecore#//Parameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Stm.ecore#//Parameter/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Stm.ecore#//Parameter/type"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
