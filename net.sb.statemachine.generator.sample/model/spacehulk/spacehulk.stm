@@ -1,0 +1,457 @@
+events
+	completion
+	startGame
+	startFirstRound
+	SELECT_SPACE_MARINE
+	SPACE_MARINE_REMOVED
+
+	LOCATION_SELECTED
+	LEFT
+	RIGHT
+	UP
+	DOWN
+	UPRIGHT
+	UPLEFT
+	DOWNRIGHT
+	DOWNLEFT
+	ROTATERIGHT
+	ROTATELEFT
+	
+	ACTIVATE
+	VALIDATE
+	CANCELED
+
+	FIGHT
+	FIRE
+	FIRED
+	ENDSPACEMARINEROUND
+	SPACEMARINEDIES
+	SPACEMARINEWINS
+	EQUALITY
+	END_PLAYING
+	STOP_GAME
+	
+	CLEAR_JAM
+	DROP_ARTIFACT
+	TAKE_ARTIFACT
+	OPEN_CLOSE_DOOR
+	OVERWATCH
+	CANCEL_OVERWATCH
+	RELOAD
+end
+ 
+commands
+	
+	connectScenarioController
+	rotateLeftOnArea
+	rotateRightOnArea
+
+	rotateLeft
+	rotateRight
+	
+	
+	placeNewMarine
+	
+	placeSpaceMarinesController
+	
+	centerOnLocation
+	
+	restoreDecors
+	
+	printNextArtifactMessage
+	placeArtifact
+
+	addStartingBlips
+	initCommandementPoints
+	
+	clearJam
+	dropArtifact
+	takeArtifact
+	openCloseDoor
+	overwatch
+	cancelOverwatch
+	reload
+
+	scrollLeft
+	scrollRight
+	scrollUp
+	scrollDown
+	scrollUpRight
+	scrollUpLeft
+	scrollDownRight
+	scrollDownLeft
+
+	spaceMarinedPlaced
+
+	moveTargetLeft
+	moveTargetRight
+	moveTargetUp
+	moveTargetDown
+	moveTargetUpRight
+	moveTargetUpLeft
+	moveTargetDownRight
+	moveTargetDownLeft
+
+	moveDoubleShotTargetLeft
+	moveDoubleShotTargetRight
+	moveDoubleShotTargetUp
+	moveDoubleShotTargetDown
+	moveDoubleShotTargetUpRight
+	moveDoubleShotTargetUpLeft
+	moveDoubleShotTargetDownRight
+	moveDoubleShotTargetDownLeft
+
+	moveLeft
+	moveRight
+	moveUp
+	moveDown
+	moveUpRight
+	moveUpLeft
+	moveDownRight
+	moveDownLeft
+
+	undoAction
+		
+	selectMarine
+	unselectMarine
+	
+	activateArea
+	
+	beginFiring
+	endFiring
+	setFlamerStateFalse
+	
+	clearMessageBar // TODO virer ca d'ici, le mettre dans GameController
+
+	activateSelectedSpaceMarine
+	activateCurrentPlayingSpaceMarine
+	
+	resetUndoAction
+	fight
+	fire
+	targetOnSelectedLocation
+	
+	findStealersDoubleShot
+	fireDoubleShot
+	exitDoubleShot
+	doubleShotSelectLocation
+
+	endSpaceMarineRound	
+	
+	playSteallers
+	stopPlaySteallers
+	
+	endStealerRound
+
+	enterEndOfGame
+	handleEndOfGame
+end
+ 
+guard 
+	stealersPlayFirst
+	
+	canPlaceSpaceMarine
+	canPlaceLastSpaceMarine
+	areaFinished
+	
+	artifactsToPlace
+	notLastArtifactToPlace
+	currentPlayingSpaceMarine
+	doubleShotWithTargetAvailable
+	doubleShotNoTargetAvailableOrFiringSpaceMarineIsNotFlamer
+	noVictory
+
+	spaceMarineCanFire           [withMessage : boolean]
+	spaceMarineCanFight          [withMessage : boolean]
+	spaceMarineCanManipulateDoor [withMessage : boolean]
+	spaceMarineCanFireOnTarget
+	spaceMarineCanMove
+	spaceMarineCanOverwatch
+	spaceMarineCanReload         [withMessage : boolean]
+	spaceMarineCanTakeArtifact   [withMessage : boolean]
+	spaceMarineCanDropArtifact   [withMessage : boolean]
+	spaceMarineCanActivateArea   [withMessage : boolean]
+	spaceMarineCanCancelOverwatch
+	isSpaceMarineJammed
+	hasUndoAction
+end
+
+
+state STARTING
+	startGame => PLACE_SPACE_MARINES
+end
+
+state PLACE_SPACE_MARINES
+	entryActions {placeSpaceMarinesController}
+
+	state SELECT_LOCATION
+		LEFT      / moveTargetLeft
+		RIGHT     / moveTargetRight
+		UP        / moveTargetUp
+		DOWN      / moveTargetDown
+		UPRIGHT   / moveTargetUpRight
+		UPLEFT    / moveTargetUpLeft
+		DOWNRIGHT / moveTargetDownRight
+		DOWNLEFT  / moveTargetDownLeft
+
+		LOCATION_SELECTED / targetOnSelectedLocation
+
+		VALIDATE  [canPlaceLastSpaceMarine]    => PLACED_LAST
+		VALIDATE  [canPlaceSpaceMarine] => PLACED
+		
+		exitActions { placeNewMarine } 
+	end
+	
+	state PLACED
+		ROTATERIGHT / rotateRightOnArea
+		ROTATELEFT  / rotateLeftOnArea
+		VALIDATE    / rotateLeftOnArea
+
+		LEFT               [areaFinished] => SELECT_LOCATION
+		RIGHT              [areaFinished] => SELECT_LOCATION
+		UP                 [areaFinished] => SELECT_LOCATION
+		DOWN               [areaFinished] => SELECT_LOCATION
+		UPRIGHT            [areaFinished] => SELECT_LOCATION
+		UPLEFT             [areaFinished] => SELECT_LOCATION
+		DOWNRIGHT          [areaFinished] => SELECT_LOCATION
+		DOWNLEFT           [areaFinished] => SELECT_LOCATION
+		LOCATION_SELECTED  [areaFinished] => SELECT_LOCATION
+		LEFT               => SELECT_LOCATION / moveTargetLeft
+		RIGHT              => SELECT_LOCATION / moveTargetRight
+		UP                 => SELECT_LOCATION / moveTargetUp
+		DOWN               => SELECT_LOCATION / moveTargetDown
+		UPRIGHT            => SELECT_LOCATION / moveTargetUpRight
+		UPLEFT             => SELECT_LOCATION / moveTargetUpLeft
+		DOWNRIGHT          => SELECT_LOCATION / moveTargetDownRight
+		DOWNLEFT           => SELECT_LOCATION / moveTargetDownLeft
+		LOCATION_SELECTED  => SELECT_LOCATION / targetOnSelectedLocation
+
+		exitActions { spaceMarinedPlaced }
+	end
+	
+	state PLACED_LAST
+		ROTATERIGHT / rotateRightOnArea
+		ROTATELEFT  / rotateLeftOnArea
+		VALIDATE    / rotateLeftOnArea
+
+		LEFT      => FINISHED / moveTargetLeft
+		RIGHT     => FINISHED / moveTargetRight
+		UP        => FINISHED / moveTargetUp
+		DOWN      => FINISHED / moveTargetDown
+		UPRIGHT   => FINISHED / moveTargetUpRight
+		UPLEFT    => FINISHED / moveTargetUpLeft
+		DOWNRIGHT => FINISHED / moveTargetDownRight
+		DOWNLEFT  => FINISHED / moveTargetDownLeft
+
+		LOCATION_SELECTED   => FINISHED
+		ENDSPACEMARINEROUND => FINISHED
+
+		exitActions {spaceMarinedPlaced}
+	end
+	
+	state FINISHED
+		completion [artifactsToPlace]                    => SPACE_ARTIFACT
+		completion                                       => START_FIRST_ROUND
+	end
+	
+	exitActions {restoreDecors clearMessageBar}
+end
+
+state SPACE_ARTIFACT
+	
+	state SELECT
+		entryActions { printNextArtifactMessage }
+
+		LOCATION_SELECTED  / centerOnLocation
+
+		LEFT      / scrollLeft
+		RIGHT     / scrollRight
+		UP        / scrollUp
+		DOWN      / scrollDown
+		UPRIGHT   / scrollUpRight
+		UPLEFT    / scrollUpLeft
+		DOWNRIGHT / scrollDownRight
+		DOWNLEFT  / scrollDownLeft
+
+		SELECT_SPACE_MARINE => SELECTED / clearMessageBar
+	end
+	
+	state SELECTED
+		entryActions { selectMarine }
+
+		LOCATION_SELECTED  / centerOnLocation
+
+		LEFT      => SELECT / scrollLeft
+		RIGHT     => SELECT / scrollRight
+		UP        => SELECT / scrollUp
+		DOWN      => SELECT / scrollDown
+		UPRIGHT   => SELECT / scrollUpRight
+		UPLEFT    => SELECT / scrollUpLeft
+		DOWNRIGHT => SELECT / scrollDownRight
+		DOWNLEFT  => SELECT / scrollDownLeft
+	
+		SELECT_SPACE_MARINE                            => SELECTED
+		VALIDATE [notLastArtifactToPlace]              => SELECT             / placeArtifact
+		VALIDATE                                       => START_FIRST_ROUND  / placeArtifact
+	
+		exitActions { 
+		//unselectMarine 
+		clearMessageBar }
+	end
+end
+
+
+state START_FIRST_ROUND
+	entryActions {connectScenarioController}
+	completion [stealersPlayFirst] => STEALERS
+	completion                     => SPACE_MARINE / addStartingBlips 
+end
+
+state SPACE_MARINE
+	entryActions {initCommandementPoints }
+
+	state SPACE_MARINE
+		LEFT      / scrollLeft
+		RIGHT     / scrollRight
+		UP        / scrollUp
+		DOWN      / scrollDown
+		UPRIGHT   / scrollUpRight
+		UPLEFT    / scrollUpLeft
+		DOWNRIGHT / scrollDownRight
+		DOWNLEFT  / scrollDownLeft
+		
+		SELECT_SPACE_MARINE                  => SELECTED  / clearMessageBar
+		VALIDATE [currentPlayingSpaceMarine] => MOVE      / activateCurrentPlayingSpaceMarine
+		ENDSPACEMARINEROUND                  => STEALERS
+	end
+	
+	state SELECTED 
+		entryActions { selectMarine }
+		
+		LOCATION_SELECTED  / centerOnLocation
+
+		LEFT      => SPACE_MARINE / scrollLeft
+		RIGHT     => SPACE_MARINE / scrollRight
+		UP        => SPACE_MARINE / scrollUp
+		DOWN      => SPACE_MARINE / scrollDown
+		UPRIGHT   => SPACE_MARINE / scrollUpRight
+		UPLEFT    => SPACE_MARINE / scrollUpLeft
+		DOWNRIGHT => SPACE_MARINE / scrollDownRight
+		DOWNLEFT  => SPACE_MARINE / scrollDownLeft
+
+		SELECT_SPACE_MARINE   => SELECTED
+		VALIDATE              => MOVE / activateSelectedSpaceMarine
+		ENDSPACEMARINEROUND   => STEALERS
+	end
+	
+	state MOVE
+
+		state ACTIVATED 
+			entryActions { clearMessageBar }
+			
+			CLEAR_JAM        / clearJam
+			DROP_ARTIFACT    / dropArtifact
+			TAKE_ARTIFACT    / takeArtifact
+			OPEN_CLOSE_DOOR  [spaceMarineCanManipulateDoor true] / openCloseDoor
+			OVERWATCH        / overwatch
+			CANCEL_OVERWATCH / cancelOverwatch
+			
+			RELOAD           [spaceMarineCanReload true]              / reload
+			
+			ROTATERIGHT [spaceMarineCanMove] / rotateRight
+			ROTATELEFT  [spaceMarineCanMove] / rotateLeft
+		
+			LEFT      [spaceMarineCanMove] / moveLeft
+			RIGHT     [spaceMarineCanMove] / moveRight
+			UP        [spaceMarineCanMove] / moveUp
+			DOWN      [spaceMarineCanMove] / moveDown
+			UPRIGHT   [spaceMarineCanMove] / moveUpRight
+			UPLEFT    [spaceMarineCanMove] / moveUpLeft
+			DOWNRIGHT [spaceMarineCanMove] / moveDownRight
+			DOWNLEFT  [spaceMarineCanMove] / moveDownLeft
+			
+			CANCELED  / undoAction
+			ACTIVATE  / activateArea
+			
+			VALIDATE 						    => SPACE_MARINE 
+			FIRE     [spaceMarineCanFire  true] => FIRE
+			FIGHT    [spaceMarineCanFight true]	=> FIGHTING
+			END_PLAYING         			    => GAME_ENDED
+			SPACE_MARINE_REMOVED [noVictory]    => SPACE_MARINE
+		end
+		
+		state FIRE
+			state FIRING
+				entryActions { beginFiring }
+				
+				LOCATION_SELECTED / targetOnSelectedLocation
+				
+				LEFT      / moveTargetLeft
+				RIGHT     / moveTargetRight
+				UP        / moveTargetUp
+				DOWN      / moveTargetDown
+				UPRIGHT   / moveTargetUpRight
+				UPLEFT    / moveTargetUpLeft
+				DOWNRIGHT / moveTargetDownRight
+				DOWNLEFT  / moveTargetDownLeft
+				
+				VALIDATE [spaceMarineCanFireOnTarget] / fire
+				FIRED [doubleShotWithTargetAvailable]   							=> DOUBLE_SHOT
+				FIRED [doubleShotNoTargetAvailableOrFiringSpaceMarineIsNotFlamer] 	=> ACTIVATED
+				CANCELED              												=> ACTIVATED / setFlamerStateFalse
+				END_PLAYING         												=> GAME_ENDED
+			end
+			
+			state DOUBLE_SHOT 
+			    entryActions { findStealersDoubleShot }
+
+				LOCATION_SELECTED  / doubleShotSelectLocation
+
+				LEFT      / moveDoubleShotTargetLeft
+				RIGHT     / moveDoubleShotTargetRight
+				UP        / moveDoubleShotTargetUp
+				DOWN      / moveDoubleShotTargetDown
+				UPRIGHT   / moveDoubleShotTargetUpRight
+				UPLEFT    / moveDoubleShotTargetUpLeft
+				DOWNRIGHT / moveDoubleShotTargetDownRight
+				DOWNLEFT  / moveDoubleShotTargetDownLeft
+
+				VALIDATE / fireDoubleShot
+				FIRED 					=> ACTIVATED
+				CANCELED 				=> ACTIVATED
+				END_PLAYING         	=> GAME_ENDED
+				
+				exitActions {exitDoubleShot}
+			end
+	
+			exitActions { endFiring }
+		end
+		
+		state FIGHTING
+			entryActions { fight }
+			SPACEMARINEDIES     => SPACE_MARINE
+			SPACEMARINEWINS     => ACTIVATED
+			EQUALITY            => ACTIVATED
+			END_PLAYING         => GAME_ENDED
+		end
+	end
+end
+
+state STEALERS 
+	entryActions { resetUndoAction endSpaceMarineRound }
+	
+	do playSteallers stopPlaySteallers
+	
+	END_PLAYING [noVictory] => SPACE_MARINE
+	END_PLAYING             => GAME_ENDED
+	
+	exitActions { endStealerRound }
+end
+
+state GAME_ENDED 
+	entryActions {enterEndOfGame}
+	STOP_GAME => QUIT_GAME / handleEndOfGame
+end
+
+state QUIT_GAME
+end

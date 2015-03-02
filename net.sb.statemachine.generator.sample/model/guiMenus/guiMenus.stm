@@ -1,0 +1,194 @@
+events
+
+	newMissionEvt
+	campaignManagerEvt
+	saveManagerEvt
+	
+	exitEvt
+	closeEvt
+	selectedEvt
+	
+	endGameEvt
+
+	yesEvt
+	noEvt
+	
+	saveEvt
+	quitEvt
+	
+		
+	campaignEvt
+	missionEvt
+	
+end
+ 
+commands
+	openMainMenu
+	
+	openMissionSelector
+	closeContainer
+	
+	openCampaignManager
+	openSaveManager
+	selectMission
+	selectCampaign
+	startMissionInCampaign
+	
+	quitMissionQuestion
+	
+	saveQuestion
+	saveMission
+	saveMissionCampaign
+	saveCampaign
+	
+	quitCampaignQuestion
+	saveCampaignQuestion
+	
+	quitGameQuestion
+	
+	pauseGame
+	restartGame
+	
+	exit	
+
+end
+ 
+guard 
+	exitFeatureAvailable
+end
+
+
+state mainMenu
+	entryActions {openMainMenu}
+	
+	state mainMenuSelection
+		newMissionEvt      => missionSelectorPanel
+		campaignManagerEvt => campaignSelectorPanel
+		saveManagerEvt     => saveManager
+	
+		exitEvt  [exitFeatureAvailable] => quitGame
+		closeEvt [exitFeatureAvailable] => quitGame
+	end
+	
+	state quitGame
+		entryActions{quitGameQuestion}
+		
+		yesEvt => exit
+		noEvt  => mainMenuSelection
+	end
+	
+end
+
+state missionSelectorPanel
+	entryActions{openMissionSelector}
+	
+	closeEvt    => mainMenu
+	selectedEvt => playMission
+	
+	exitActions {closeContainer}
+end	
+
+state campaignSelectorPanel
+	entryActions{openCampaignManager}
+
+	closeEvt    => mainMenu
+	selectedEvt => campaignPanel
+
+	exitActions {closeContainer}
+end	
+
+state saveManager
+	entryActions{openSaveManager}
+
+	closeEvt    => mainMenu
+	campaignEvt => campaignPanel
+	missionEvt  => playMission
+
+	exitActions {closeContainer}
+end	
+
+state campaignPanel
+	entryActions{selectCampaign}
+
+	state campaignDashboard
+		closeEvt    => quitCampaign
+		
+		selectedEvt => playCampaign
+	end
+	
+	state quitCampaign
+		entryActions{quitCampaignQuestion}
+		
+		yesEvt => saveCampaign
+		noEvt  => campaignDashboard
+	end
+	
+	state saveCampaign
+		entryActions{saveCampaignQuestion}
+		
+		yesEvt => mainMenu / saveCampaign
+		noEvt  => mainMenu
+	end
+	
+	exitActions{closeContainer}
+end	
+
+state playMission
+	entryActions{selectMission}
+	
+	state playing
+		closeEvt   => quitMission
+		
+		endGameEvt => mainMenu
+	end
+
+	state quitMission
+		entryActions{pauseGame quitMissionQuestion}
+
+		yesEvt => saveMission
+		noEvt  => playing  /restartGame
+	end
+		
+	state saveMission
+		entryActions{saveQuestion}
+		
+		yesEvt => mainMenu / saveMission
+		noEvt  => mainMenu
+
+	end
+
+	exitActions{closeContainer}
+	
+end	
+
+state playCampaign
+	entryActions{startMissionInCampaign}
+	
+	state playing
+		closeEvt   => quitMission
+		
+		endGameEvt => campaignPanel 
+	end
+	
+	state quitMission
+		entryActions{pauseGame quitMissionQuestion}
+
+		yesEvt => saveMission
+		noEvt  => playing  /restartGame
+	end
+
+	state saveMission
+		entryActions{saveQuestion}
+		
+		yesEvt => campaignPanel / saveMissionCampaign
+		noEvt  => campaignPanel
+		
+	end
+
+	exitActions{closeContainer}
+	
+end	
+
+state exit
+	entryActions{exit}
+end	

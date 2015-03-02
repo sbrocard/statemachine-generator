@@ -1,0 +1,64 @@
+events
+	completion
+	click
+	doubleClick
+	dragged
+end
+ 
+commands
+	selectMarine
+	selectLocation
+	selectLocationAndValidate
+	activateMarine
+	validate
+	autoAction
+	moveSpaceMarine
+	dragScreen	
+end
+ 
+guard 
+	isNoActivatedMarine
+	isSelectMarine
+	isFire
+	isMoveSpaceMarine
+	isMarineSelected
+	isSpaceMarineClicked
+end
+
+
+state enter
+	completion [isSelectMarine]      => selectMarine
+	completion [isNoActivatedMarine] => noActivatedMarine
+	completion [isFire]              => fire
+	completion [isMoveSpaceMarine]   => moveActivated
+	completion                       => nope
+end
+
+state selectMarine
+	click       / selectLocation
+	doubleClick / selectLocationAndValidate
+	dragged     / dragScreen
+end
+
+ state noActivatedMarine
+	click       [isMarineSelected] / selectMarine
+	doubleClick [isMarineSelected] / activateMarine
+	doubleClick                    / selectLocation
+	dragged                        / dragScreen
+end
+
+state fire
+	click       / selectLocation
+	doubleClick / selectLocationAndValidate
+	dragged     / dragScreen
+end
+
+state moveActivated
+	doubleClick [isSpaceMarineClicked] / validate
+	click                              / moveSpaceMarine
+	doubleClick                        / autoAction
+	dragged                            / dragScreen
+end
+
+state nope
+end
