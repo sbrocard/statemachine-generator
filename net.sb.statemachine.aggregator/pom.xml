@@ -1,0 +1,22 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.sb.statemachine</groupId>
+    <artifactId>net.sb.statemachine.aggregator</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <parent>
+        <groupId>net.sb.statemachine</groupId>
+        <artifactId>net.sb.statemachine.parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../net.sb.statemachine.parent</relativePath>
+    </parent>
+
+    <modules>
+        <module>../net.sb.statemachine.dsl</module>
+        <module>../net.sb.statemachine.dsl.ui</module>
+        <module>../net.sb.statemachine.generator</module>
+        <module>../net.sb.statemachine.generator.sample</module>
+        <module>../net.sb.statemachine.generator.ui</module>
+    </modules>
+</project> 

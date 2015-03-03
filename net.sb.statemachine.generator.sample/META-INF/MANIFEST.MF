@@ -4,3 +4,4 @@ Bundle-Name: Statemachine Sample
 Bundle-SymbolicName: net.sb.statemachine.generator.sample
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: SB

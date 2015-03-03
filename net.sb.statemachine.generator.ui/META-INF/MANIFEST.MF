@@ -4,7 +4,7 @@ Bundle-Name: Acceleo StatemachineGenerator Module IDE Plug-in
 Bundle-SymbolicName: net.sb.statemachine.generator.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sb.statemachine.generator.ui.Activator
-Bundle-Vendor: Eclipse Modeling Project
+Bundle-Vendor: SB
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources, 
@@ -15,6 +15,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ocl.ecore,
  org.eclipse.acceleo.model,
  org.eclipse.acceleo.engine
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true

@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: net.sb.statemachine.dsl
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Vendor: SB
+Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: net.sb.statemachine.dsl; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
@@ -12,7 +12,6 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.emf.mwe.utils;resolution:=optional,
  org.eclipse.emf.mwe2.launch;resolution:=optional,
  com.ibm.icu;resolution:=optional,
- org.eclipse.xtext.xtend;resolution:=optional,
  org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
